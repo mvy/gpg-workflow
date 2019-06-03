@@ -56,6 +56,7 @@ case $arg in
         ;;
 # Create a new key and save it
     new)
+        source ${BIN}/backupdir
         source ${BIN}/new
         ;;
 # Restores the complete key and ownertrust
@@ -98,7 +99,7 @@ case $arg in
         ;;
 # Publish the key
     publish)
-        ${BIN}/publish
+        source ${BIN}/publish
         ;;
     *)
         bin/red "Invalid action"
