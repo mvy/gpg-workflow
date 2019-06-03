@@ -1,0 +1,7 @@
+#!/bin/bash
+${BIN}/green "Creating a backup of the complete key"
+gpg --export-secret-keys ${KEYID} > ${BACKUPDIR}/${KEYID}.gpg
+gpg --export-ownertrust > ${BACKUPDIR}/ownertrust.gpg
+GIT_DIR=${BACKUPDIR}/.git GIT_WORK_TREE=${BACKUPDIR} git add '.'
+GIT_DIR=${BACKUPDIR}/.git GIT_WORK_TREE=${BACKUPDIR} git commit -m "Updating secrets"
+

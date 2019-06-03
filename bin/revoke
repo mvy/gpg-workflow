@@ -1,0 +1,5 @@
+#/!bin/bash
+${BIN}/green "Revoking the master key"
+gpg --gen-revoke ${KEYID} > revocation.txt
+gpg --import revocation.txt
+${BIN}/red "Key revoked! Use 'make publish' to send it around."

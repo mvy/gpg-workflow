@@ -1,0 +1,4 @@
+#!bin/bash
+${BIN}/green "Importing a backup of the complete key"
+gpg --import --import-options restore ${BACKUPDIR}/${KEYID}.gpg
+gpg --import-ownertrust ${BACKUPDIR}/ownertrust.gpg

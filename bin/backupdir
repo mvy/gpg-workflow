@@ -1,0 +1,5 @@
+#!/bin/bash
+${BIN}/green "Making sure the backup path is a git directory"
+test -d ${BACKUPDIR} || mkdir -p ${BACKUPDIR}
+test -d ${BACKUPDIR}/.git || git init ${BACKUPDIR}
+

@@ -1,0 +1,5 @@
+KEYUID="Elliot Alderson <mrrobot@fs0c13ty.org>"
+BACKUPDIR="./tmp/gpg-backup"
+EXPIRE="1m"
+ALGORITHM_PRIM="rsa4096"
+ALGORITHM_SUB="rsa4096"

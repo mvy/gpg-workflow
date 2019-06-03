@@ -1,0 +1,107 @@
+#!/bin/bash
+
+display_usage() {
+    echo -e "gpgw <action>
+
+Actions:
+  new:              create a new set of keys
+  strip-master:     remove the primary key from the keyring
+  import:           import the primary key from the backup directory
+  keystocard:       send the subjeys to the smartcard
+  publish:          publish to keyservers (including keybase, requires keybase 
+                    installed)
+  renew:            renew the subkeys, revoke older subkeys
+  rev-subkeys:      revoke the subkeys
+  revoke:           revoke the master key
+
+  show-config:      shows which values are used by gpgw
+"
+}
+
+# Setting up current directory
+SOURCE="${BASH_SOURCE[0]}"
+while [ -h "$SOURCE" ]; do # resolve $SOURCE until the file is no longer a symlink
+  DIR="$( cd -P "$( dirname "$SOURCE" )" >/dev/null 2>&1 && pwd )"
+  SOURCE="$(readlink "$SOURCE")"
+  [[ $SOURCE != /* ]] && SOURCE="$DIR/$SOURCE" # if $SOURCE was a relative symlink, we need to resolve it relative to the path where the symlink file was located
+done
+DIR="$( cd -P "$( dirname "$SOURCE" )" >/dev/null 2>&1 && pwd )"
+BIN=${DIR}/bin
+
+
+if 
+    [ $# -lt 1 ]
+then
+    display_usage
+    exit 1
+fi
+
+# Load config
+source ${BIN}/common
+
+arg=$1
+
+case $arg in
+# Check that BACKUPDIR exists and is a git repository
+    backupdir)
+        source ${BIN}/backupdir
+        ;;
+# Save the complete key with its secrets and ownertrust in a new commit
+    export)
+        source ${BIN}/export
+    ;;
+# Show the values used by gpgw
+    show-config)
+        source ${BIN}/show-config
+        ;;
+# Create a new key and save it
+    new)
+        source ${BIN}/new
+        ;;
+# Restores the complete key and ownertrust
+    import)
+        source ${BIN}/backupdir
+        source ${BIN}/purge-secrets
+        source ${BIN}/import
+        ;;
+# Transfer all non-expired/non-revoked subkeys to the smartcard
+    keystocard)
+        source ${BIN}/keystocard
+        ;;
+# Remove the secret of the master key
+    strip-master)
+        source ${BIN}/strip-master
+        ;;
+# Revoke all the subkeys of the key (reason is "key superseded")
+    revoke-subkeys|rev-subkeys)
+        source ${BIN}/import
+        source ${BIN}/rev-subkeys
+        source ${BIN}/strip-master
+        ;;
+# Revoke all subkeys and create new ones
+    renew)
+        source ${BIN}/import
+        source ${BIN}/rev-subkeys
+        source ${BIN}/add-subkeys
+        source ${BIN}/export
+        ${BIN}/blue "To make another backup, run gpgw export <path>"
+        ${BIN}/blue "Otherwiser, run gpgw strip-master"
+        ;;
+# Revoke the key (requires the secret of the master)
+    revoke)
+        source ${BIN}/import
+        source ${BIN}/rev-subkeys
+        source ${BIN}/revoke
+        ;;
+    --help|-h)
+        display_usage
+        ;;
+# Publish the key
+    publish)
+        ${BIN}/publish
+        ;;
+    *)
+        bin/red "Invalid action"
+        display_usage
+        ;;
+esac

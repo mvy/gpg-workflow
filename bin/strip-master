@@ -1,0 +1,5 @@
+#!/bin/bash
+${BIN}/green "Removing the master secret"
+rm -f ${GNUPGHOME}/private-keys-v1.d/${KGRIP}.key
+${BIN}/blue "You should now run 'gpgw keystocard'"
+

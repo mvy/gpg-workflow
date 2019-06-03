@@ -1,0 +1,12 @@
+#!/bin/bash
+echo "gpgw directory: ${DIR}"
+
+echo "GNUPGHOME: ${GNUPGHOME}"
+echo "KEYUID: ${KEYUID}"
+echo "BACKUPDIR: ${BACKUPDIR}"
+echo "EXPIRE: ${EXPIRE}"
+echo "ALGORITHM_PRIM: ${ALGORITHM_PRIM}"
+echo "ALGORITHM_SUB: ${ALGORITHM_SUB}"
+
+echo "KEYID: ${KEYID}"
+echo "KGRIP: ${KGRIP}"

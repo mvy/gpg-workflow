@@ -1,0 +1,33 @@
+#!/bin/bash
+
+# Errors
+err_keyexists="\
+A master key for ${KEYUID} already exists. To renew the subkeys, use gpgw renew.\
+"
+err_nokeyid="Error during master key generation, no KEYID found"
+
+# Fail if the master key already exists
+${BIN}/green ${KEYUID}
+# KEYID can contain whitespace, we substitute them for empty characters
+if
+    [ ! -z ${KEYID// +x} ]
+then
+    ${BIN}/red ${err_keyexists}
+    exit 1
+fi
+
+source ${BIN}/new-key
+# Reload config to update the KEYID, check it's non empty
+source ${BIN}/common 
+
+if
+    [ -z ${KEYID// +x} ]
+then
+    ${BIN}/red ${err_nokeyid}
+    exit 1
+fi
+
+# add subkeys and export 
+source ${BIN}/add-subkeys
+source ${BIN}/export
+${BIN}/blue "To make another backup, run 'gpgw export <path>'"

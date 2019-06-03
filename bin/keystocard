@@ -1,0 +1,4 @@
+#!/bin/bash
+${BIN}/green "Transferring all valid subkeys to the smartcard"
+${BIN}/transfer-subkeys-to-card ${KEYID}
+${BIN}/blue "You should now run 'gpgw publish'"

@@ -1,0 +1,36 @@
+#!/bin/bash
+
+# Check the config file first
+if
+    [ ! -f ${DIR}/config ]
+then
+    echo "config file does not exist. Please copy config.example to config and
+    tailor it to your needs"
+    exit 1
+else
+    source ${DIR}/config
+fi
+
+# Mandatory values
+if 
+    [ -z ${KEYUID+x} ]
+then
+    echo "UID not defined. Please create config and adpat it to your needs."
+    exit 1
+fi
+if 
+    [ -z ${BACKUPDIR+x} ]
+then
+    echo "BACKUPDIR not defined. Please create config and adpat it to your needs."
+    exit 1
+fi
+
+# Default values
+GNUPGHOME=${GNUPGHOME:=${HOME}/.gnupg}
+EXPIRE=${EXPIRE:="1m"}
+ALGORITHM_PRIM=${ALGORITHM_PRIM:="rsa4096"}
+ALGORITHM_SUB=${ALGORITHM_SUB:="rsa4096"}
+
+KEYID=`gpg -k --with-colons ${KEYUID} | grep "^fpr" | head -n1 | cut -d: -f10`
+KGRIP=`gpg -K --with-colons ${KEYUID} | sed -n 3p | cut -d: -f10`
+

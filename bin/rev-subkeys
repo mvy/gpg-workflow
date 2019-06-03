@@ -1,0 +1,4 @@
+#!/bin/bash
+${BIN}/green "Revoking all subkeys"
+${BIN}/revoke-all-subkeys ${KEYID}
+

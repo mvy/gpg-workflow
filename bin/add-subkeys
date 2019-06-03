@@ -1,0 +1,6 @@
+#!/bin/bash
+
+${BIN}/green "Generating subkeys for encr, sign and auth"
+gpg --quick-add-key ${KEYID} ${ALGORITHM_SUB} encr ${EXPIRE}
+gpg --quick-add-key ${KEYID} ${ALGORITHM_SUB} sign ${EXPIRE}
+gpg --quick-add-key ${KEYID} ${ALGORITHM_SUB} auth ${EXPIRE}

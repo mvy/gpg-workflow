@@ -1,0 +1,4 @@
+#!/bin/bash
+
+${BIN}/green "Generating a new key"
+gpg --quick-gen-key "${KEYUID}" ${ALGORITHM_PRIM} cert never
